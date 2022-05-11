@@ -3,9 +3,9 @@ import path from 'path';
 import { SlashCommandBuilder } from 'discord.js';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v10';
-import SlashCommand from '../types/SlashCommand';
 import Config from '../config/Config';
 import Logger from '../services/Logger';
+import SlashCommand from '../types/SlashCommand';
 
 export default class CommandHandler {
   private readonly devCommandBuilders: SlashCommandBuilder[];
@@ -32,14 +32,13 @@ export default class CommandHandler {
       });
 
     await Promise.all(commandFiles.map(async (filepath) => {
-      const { builder } = await import(filepath);
-      if (builder && builder instanceof SlashCommandBuilder) {
-        builders.push(builder);
+      const command = await import(filepath);
+      if (command.default.builder && command.default.builder instanceof SlashCommandBuilder) {
+        builders.push(command.default.builder);
       } else throw new Error(`Command file ${filepath} does not contain valid builder.`);
 
-      const command = await import(filepath);
       if (command.default && command.default instanceof SlashCommand) {
-        this.commands.set(builder.name, command.default);
+        this.commands.set(command.default.builder.name, command.default);
       } else throw new Error(`Command file ${filepath} does not export a valid slash command as default.`);
     })).then(() => Logger.info(`${type === 'dev' ? `${this.devCommandBuilders.length} developer` : `${this.publicCommandBuilders.length} public`} commands loaded.`));
   }

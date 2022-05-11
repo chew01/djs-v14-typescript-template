@@ -1,5 +1,6 @@
 import {
   ActionRowBuilder,
+  CommandInteraction,
   EmbedBuilder,
   MessageComponentInteraction,
   SelectMenuBuilder,
@@ -9,8 +10,6 @@ import {
 import SlashCommand from '../../../types/SlashCommand';
 import PingHelpEmbed from './embeds/ping/PingHelpEmbed';
 import InfoHelpEmbed from './embeds/info/InfoHelpEmbed';
-
-export const builder = new SlashCommandBuilder().setName('help').setDescription('Replies with bot info!');
 
 const MainEmbed = new EmbedBuilder({
   author: { name: "Taihou's Helpdesk", iconURL: 'https://i.imgur.com/qYcgbPZ.jpg' },
@@ -33,42 +32,46 @@ const HelpSelector = new SelectMenuBuilder({
 
 const HelpActionRow = new ActionRowBuilder<SelectMenuBuilder>({ components: [HelpSelector] });
 
-const PingCommand = new SlashCommand().setFn(async (interaction) => {
-  if (interaction.inCachedGuild()) {
-    const helpMessage = await interaction.reply(
-      { embeds: [MainEmbed], components: [HelpActionRow], fetchReply: true },
-    );
+class HelpCommand extends SlashCommand {
+  public builder = new SlashCommandBuilder().setName('help').setDescription('Replies with bot info!');
 
-    const filter = (i: MessageComponentInteraction) => i.customId === 'help-selector' && i.user.id === interaction.user.id;
+  public async execute(interaction: CommandInteraction) {
+    if (interaction.inCachedGuild()) {
+      const helpMessage = await interaction.reply(
+        { embeds: [MainEmbed], components: [HelpActionRow], fetchReply: true },
+      );
 
-    const collector = helpMessage.createMessageComponentCollector({ filter, time: 15000 });
+      const filter = (i: MessageComponentInteraction) => i.customId === 'help-selector' && i.user.id === interaction.user.id;
 
-    collector.on('collect', async (i: SelectMenuInteraction) => {
-      const selected = i.values[0];
+      const collector = helpMessage.createMessageComponentCollector({ filter, time: 15000 });
 
-      switch (selected) {
-        case 'main':
-          await i.update({ embeds: [MainEmbed] });
-          break;
-        case 'ping':
-          await i.update({ embeds: [PingHelpEmbed] });
-          break;
-        case 'info':
-          await i.update({ embeds: [InfoHelpEmbed] });
-          break;
-        default:
-          break;
-      }
-      collector.resetTimer();
-    });
+      collector.on('collect', async (i: SelectMenuInteraction) => {
+        const selected = i.values[0];
 
-    collector.on('end', (_, reason) => {
-      helpMessage.edit({ components: [] });
-      if (reason === 'time' && helpMessage.embeds[0]) {
-        helpMessage.edit({ embeds: [new EmbedBuilder(helpMessage.embeds[0].data).setFooter({ text: 'Command timed out! Use the /help command again for command help.' })] });
-      }
-    });
+        switch (selected) {
+          case 'main':
+            await i.update({ embeds: [MainEmbed] });
+            break;
+          case 'ping':
+            await i.update({ embeds: [PingHelpEmbed] });
+            break;
+          case 'info':
+            await i.update({ embeds: [InfoHelpEmbed] });
+            break;
+          default:
+            break;
+        }
+        collector.resetTimer();
+      });
+
+      collector.on('end', (_, reason) => {
+        helpMessage.edit({ components: [] });
+        if (reason === 'time' && helpMessage.embeds[0]) {
+          helpMessage.edit({ embeds: [new EmbedBuilder(helpMessage.embeds[0].data).setFooter({ text: 'Command timed out! Use the /help command again for command help.' })] });
+        }
+      });
+    }
   }
-});
+}
 
-export default PingCommand;
+export default new HelpCommand();

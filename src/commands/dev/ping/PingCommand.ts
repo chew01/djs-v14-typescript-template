@@ -1,8 +1,12 @@
-import { SlashCommandBuilder } from 'discord.js';
+import { CommandInteraction, SlashCommandBuilder } from 'discord.js';
 import SlashCommand from '../../../types/SlashCommand';
 
-export const builder = new SlashCommandBuilder().setName('ping').setDescription('Replies with Pong!');
+class PingCommand extends SlashCommand {
+  builder: SlashCommandBuilder = new SlashCommandBuilder().setName('ping').setDescription('Replies with Pong!');
 
-const PingCommand = new SlashCommand().setFn(async (interaction) => interaction.reply('Pong!'));
+  execute(interaction: CommandInteraction) {
+    return interaction.reply('Ping!');
+  }
+}
 
-export default PingCommand;
+export default new PingCommand();
