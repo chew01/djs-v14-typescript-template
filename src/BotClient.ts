@@ -5,7 +5,7 @@ import chalk from 'chalk';
 import Config from './config/Config';
 import type BotEventHandler from './types/BotEventHandler';
 import CommandHandler from './commands/CommandHandler';
-import logHelper from './utils/logger';
+import Logger from './services/Logger';
 
 export default class BotClient {
   readonly bot: Client;
@@ -27,7 +27,7 @@ export default class BotClient {
       this.events.push(event.default);
     }));
 
-    if (!this.events) return logHelper.warn('No events were found!');
+    if (!this.events) return Logger.warn('No events were found!');
 
     this.events.forEach((event) => {
       if (event.once) {
@@ -37,12 +37,12 @@ export default class BotClient {
       }
     });
 
-    return logHelper.info(`${this.events.length} events loaded!`);
+    return Logger.info(`${this.events.length} events loaded!`);
   }
 
   public async initialise() {
-    if (Config.DEVELOPMENT_MODE) logHelper.setDevMode();
-    logHelper.info(chalk.yellow('INITIALIZING...'));
+    if (Config.DEVELOPMENT_MODE) Logger.setDevMode();
+    Logger.info(chalk.yellow('INITIALIZING...'));
     await this.loadEvents();
 
     await this.commands.load();

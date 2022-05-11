@@ -3,10 +3,9 @@ import path from 'path';
 import { SlashCommandBuilder } from 'discord.js';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v10';
-import log from 'loglevel';
 import SlashCommand from '../types/SlashCommand';
 import Config from '../config/Config';
-import logHelper from '../utils/logger';
+import Logger from '../services/Logger';
 
 export default class CommandHandler {
   private readonly devCommandBuilders: SlashCommandBuilder[];
@@ -42,7 +41,7 @@ export default class CommandHandler {
       if (command.default && command.default instanceof SlashCommand) {
         this.commands.set(builder.name, command.default);
       } else throw new Error(`Command file ${filepath} does not export a valid slash command as default.`);
-    })).then(() => logHelper.info(`${type === 'dev' ? `${this.devCommandBuilders.length} developer` : `${this.publicCommandBuilders.length} public`} commands loaded.`));
+    })).then(() => Logger.info(`${type === 'dev' ? `${this.devCommandBuilders.length} developer` : `${this.publicCommandBuilders.length} public`} commands loaded.`));
   }
 
   public async load() {
@@ -70,9 +69,7 @@ export default class CommandHandler {
       }
     } catch (err) {
       if (err instanceof Error) {
-        logHelper.error(err.message);
-      } else {
-        log.error(err);
+        Logger.error(err.message);
       }
     }
   }
