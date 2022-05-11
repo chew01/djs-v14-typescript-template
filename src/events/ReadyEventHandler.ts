@@ -6,8 +6,8 @@ const ReadyEventHandler = new BotEventHandler()
   .setName('ready')
   .setOnce(true)
   .setExecute((client) => {
-    if (!client.bot.user) return;
-    Logger.info(chalk.green.bold(`Ready! Bot logged in as ${client.bot.user.tag}`));
+    if (!client.user) return;
+    Logger.info(chalk.green.bold(`Ready! Bot logged in as ${client.user.tag}`));
   });
 
 export default ReadyEventHandler;

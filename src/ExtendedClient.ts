@@ -7,15 +7,13 @@ import type BotEventHandler from './types/BotEventHandler';
 import CommandHandler from './commands/CommandHandler';
 import Logger from './services/Logger';
 
-export default class BotClient {
-  readonly bot: Client;
-
+export default class ExtendedClient extends Client {
   private readonly events: BotEventHandler[];
 
   readonly commands: CommandHandler;
 
   public constructor() {
-    this.bot = new Client({ intents: Config.GATEWAY_INTENTS });
+    super({ intents: Config.GATEWAY_INTENTS });
     this.events = [];
     this.commands = new CommandHandler();
   }
@@ -31,9 +29,9 @@ export default class BotClient {
 
     this.events.forEach((event) => {
       if (event.once) {
-        this.bot.once(event.name, (...args) => event.execute(this, ...args));
+        this.once(event.name, (...args) => event.execute(this, ...args));
       } else {
-        this.bot.on(event.name, (...args) => event.execute(this, ...args));
+        this.on(event.name, (...args) => event.execute(this, ...args));
       }
     });
 
@@ -48,8 +46,8 @@ export default class BotClient {
     await this.commands.load();
     await this.commands.update();
 
-    await this.bot.login(Config.DISCORD_TOKEN);
+    await this.login(Config.DISCORD_TOKEN);
   }
 }
 
-new BotClient().initialise();
+new ExtendedClient().initialise();

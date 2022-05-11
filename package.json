@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "start": "node build/BotClient.js",
-    "bot": "tsc && node build/BotClient.js",
-    "dev": "ts-node-dev --transpile-only --poll src/BotClient.ts"
+    "start": "node build/ExtendedClient.js",
+    "bot": "tsc && node build/ExtendedClient.js",
+    "dev": "ts-node-dev --transpile-only --poll src/ExtendedClient.ts"
   },
   "repository": {
     "type": "git",

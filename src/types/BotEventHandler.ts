@@ -1,6 +1,6 @@
-import type BotClient from '../BotClient';
+import type ExtendedClient from '../ExtendedClient';
 
-type EventExecuteFunction = (bot: BotClient, ...args: any[]) => void;
+type EventExecuteFunction = (bot: ExtendedClient, ...args: any[]) => void;
 
 export default class BotEventHandler {
   name: string;
