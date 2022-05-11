@@ -2,7 +2,7 @@ import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import SlashCommand from '../../../types/SlashCommand';
-import formatBytes from '../../../utils/math';
+import MathUtils from '../../../utils/MathUtils';
 
 dayjs.extend(duration);
 
@@ -17,7 +17,7 @@ const InfoCommand = new SlashCommand().setFn(async (interaction) => {
   const cachedMembers = interaction.client.users.cache.size.toString();
   const nodeVersion = process.version;
   const uptime = dayjs.duration(interaction.client.uptime as number).format('D[d] H[h] m[m] s[s]');
-  const usageStats = `**RSS**: ${formatBytes(usage.rss)}\n**Heap Total**: ${formatBytes(usage.heapTotal)}\n**Heap Used** ${formatBytes(usage.heapUsed)}`;
+  const usageStats = `**RSS**: ${MathUtils.formatBytes(usage.rss)}\n**Heap Total**: ${MathUtils.formatBytes(usage.heapTotal)}\n**Heap Used** ${MathUtils.formatBytes(usage.heapUsed)}`;
 
   const InfoEmbed = new EmbedBuilder({
     fields: [
