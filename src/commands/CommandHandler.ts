@@ -5,9 +5,7 @@ import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v10';
 import log from 'loglevel';
 import SlashCommand from '../types/SlashCommand';
-import {
-  BOT_CLIENT_ID, DEV_GUILD_ID, DEVELOPMENT_MODE, DISCORD_TOKEN,
-} from '../config';
+import Config from '../config/Config';
 import logHelper from '../utils/logger';
 
 export default class CommandHandler {
@@ -48,21 +46,27 @@ export default class CommandHandler {
   }
 
   public async load() {
-    if (!DEVELOPMENT_MODE) await this.loadCommands('public', this.publicCommandBuilders);
+    if (!Config.DEVELOPMENT_MODE) await this.loadCommands('public', this.publicCommandBuilders);
     await this.loadCommands('dev', this.devCommandBuilders);
   }
 
   public async update() {
-    const rest = new REST({ version: '10' }).setToken(DISCORD_TOKEN);
+    const rest = new REST({ version: '10' }).setToken(Config.DISCORD_TOKEN);
 
     try {
       if (this.publicCommandBuilders.length) {
         const body = this.publicCommandBuilders.map((builder) => builder.toJSON());
-        await rest.put(Routes.applicationCommands(BOT_CLIENT_ID), { body });
+        await rest.put(Routes.applicationCommands(Config.BOT_CLIENT_ID), { body });
       }
-      if (DEV_GUILD_ID) {
+      if (Config.DEV_GUILD_ID) {
         const body = this.devCommandBuilders.map((builder) => builder.toJSON());
-        await rest.put(Routes.applicationGuildCommands(BOT_CLIENT_ID, DEV_GUILD_ID), { body });
+        await rest.put(
+          Routes.applicationGuildCommands(
+            Config.BOT_CLIENT_ID,
+            Config.DEV_GUILD_ID,
+          ),
+          { body },
+        );
       }
     } catch (err) {
       if (err instanceof Error) {

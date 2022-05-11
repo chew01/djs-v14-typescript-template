@@ -1,0 +1,7 @@
+{
+  "intents": [
+    "DirectMessages",
+    "Guilds",
+    "GuildMessages"
+  ]
+}

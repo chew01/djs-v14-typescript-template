@@ -2,7 +2,7 @@ import { Client } from 'discord.js';
 import fs from 'fs';
 import path from 'path';
 import chalk from 'chalk';
-import { DEVELOPMENT_MODE, DISCORD_TOKEN, GATEWAY_INTENTS } from './config';
+import Config from './config/Config';
 import type BotEventHandler from './types/BotEventHandler';
 import CommandHandler from './commands/CommandHandler';
 import logHelper from './utils/logger';
@@ -15,7 +15,7 @@ export default class BotClient {
   readonly commands: CommandHandler;
 
   public constructor() {
-    this.bot = new Client({ intents: GATEWAY_INTENTS });
+    this.bot = new Client({ intents: Config.GATEWAY_INTENTS });
     this.events = [];
     this.commands = new CommandHandler();
   }
@@ -41,14 +41,14 @@ export default class BotClient {
   }
 
   public async initialise() {
-    if (DEVELOPMENT_MODE) logHelper.setDevMode();
+    if (Config.DEVELOPMENT_MODE) logHelper.setDevMode();
     logHelper.info(chalk.yellow('INITIALIZING...'));
     await this.loadEvents();
 
     await this.commands.load();
     await this.commands.update();
 
-    await this.bot.login(DISCORD_TOKEN);
+    await this.bot.login(Config.DISCORD_TOKEN);
   }
 }
 
