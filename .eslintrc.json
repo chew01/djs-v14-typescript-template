@@ -17,5 +17,13 @@
         "@typescript-eslint"
     ],
     "rules": {
-    }
+    },
+    "overrides": [
+        {
+            "files": ["./src/commands/dev/**/*.ts"],
+            "rules": {
+                "class-methods-use-this": "off"
+            }
+        }
+    ]
 }
