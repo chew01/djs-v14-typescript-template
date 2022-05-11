@@ -1,7 +1,6 @@
-import type { CommandInteraction, SlashCommandBuilder } from 'discord.js';
+import type { CommandInteraction } from 'discord.js';
 
 export default abstract class SlashCommand {
-  abstract builder: SlashCommandBuilder;
   abstract execute(interaction: CommandInteraction, ...args: any[]): any;
 
   public async run(interaction: CommandInteraction, ...args: any[]) {

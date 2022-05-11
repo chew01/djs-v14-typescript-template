@@ -33,8 +33,6 @@ const HelpSelector = new SelectMenuBuilder({
 const HelpActionRow = new ActionRowBuilder<SelectMenuBuilder>({ components: [HelpSelector] });
 
 class HelpCommand extends SlashCommand {
-  public builder = new SlashCommandBuilder().setName('help').setDescription('Replies with bot info!');
-
   public async execute(interaction: CommandInteraction) {
     if (interaction.inCachedGuild()) {
       const helpMessage = await interaction.reply(
@@ -73,5 +71,7 @@ class HelpCommand extends SlashCommand {
     }
   }
 }
+
+export const builder = new SlashCommandBuilder().setName('help').setDescription('Replies with bot info!');
 
 export default new HelpCommand();

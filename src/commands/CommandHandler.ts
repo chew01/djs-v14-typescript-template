@@ -33,12 +33,12 @@ export default class CommandHandler {
 
     await Promise.all(commandFiles.map(async (filepath) => {
       const command = await import(filepath);
-      if (command.default.builder && command.default.builder instanceof SlashCommandBuilder) {
-        builders.push(command.default.builder);
+      if (command.builder && command.builder instanceof SlashCommandBuilder) {
+        builders.push(command.builder);
       } else throw new Error(`Command file ${filepath} does not contain valid builder.`);
 
       if (command.default && command.default instanceof SlashCommand) {
-        this.commands.set(command.default.builder.name, command.default);
+        this.commands.set(command.builder.name, command.default);
       } else throw new Error(`Command file ${filepath} does not export a valid slash command as default.`);
     })).then(() => Logger.info(`${type === 'dev' ? `${this.devCommandBuilders.length} developer` : `${this.publicCommandBuilders.length} public`} commands loaded.`));
   }

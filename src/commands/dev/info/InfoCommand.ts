@@ -7,10 +7,6 @@ import MathUtils from '../../../utils/MathUtils';
 dayjs.extend(duration);
 
 class InfoCommand extends SlashCommand {
-  builder: SlashCommandBuilder = new SlashCommandBuilder()
-    .setName('info')
-    .setDescription('Replies with bot statistics.');
-
   async execute(interaction: CommandInteraction) {
     const usage = process.memoryUsage();
     const totalGuilds = interaction.client.guilds.cache.size.toString();
@@ -35,5 +31,9 @@ class InfoCommand extends SlashCommand {
     return interaction.reply({ embeds: [InfoEmbed] });
   }
 }
+
+export const builder = new SlashCommandBuilder()
+  .setName('info')
+  .setDescription('Replies with bot statistics.');
 
 export default new InfoCommand();
