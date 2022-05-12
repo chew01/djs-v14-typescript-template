@@ -1,10 +1,14 @@
 import type { CommandInteraction } from 'discord.js';
 import BotEventHandler from '../types/BotEventHandler';
 import Logger from '../services/Logger';
+import type ExtendedClient from '../ExtendedClient';
 
-const InteractionCreateEventHandler = new BotEventHandler()
-  .setName('interactionCreate')
-  .setExecute(async (client, interaction: CommandInteraction) => {
+class InteractionCreateEventHandler extends BotEventHandler {
+  name = 'interactionCreate';
+
+  once = false;
+
+  async execute(client: ExtendedClient, interaction: CommandInteraction) {
     if (interaction.isCommand()) {
       Logger.logCommand(interaction, 'Trigger', interaction.commandName);
       const slashCommand = await client.commands.handle(interaction.commandName);
@@ -27,6 +31,7 @@ const InteractionCreateEventHandler = new BotEventHandler()
       }
     }
     return null;
-  });
+  }
+}
 
-export default InteractionCreateEventHandler;
+export default new InteractionCreateEventHandler();

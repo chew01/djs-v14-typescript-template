@@ -1,32 +1,9 @@
 import type ExtendedClient from '../ExtendedClient';
 
-type EventExecuteFunction = (bot: ExtendedClient, ...args: any[]) => void;
+export default abstract class BotEventHandler {
+  abstract name: string;
 
-export default class BotEventHandler {
-  name: string;
+  abstract once: boolean;
 
-  once: boolean;
-
-  execute: EventExecuteFunction;
-
-  public constructor() {
-    this.name = '';
-    this.once = false;
-    this.execute = () => {};
-  }
-
-  public setName(name: string) {
-    this.name = name;
-    return this;
-  }
-
-  public setOnce(once: boolean) {
-    this.once = once;
-    return this;
-  }
-
-  public setExecute(fn: EventExecuteFunction) {
-    this.execute = fn;
-    return this;
-  }
+  abstract execute(client: ExtendedClient, ...args: any[]): any;
 }
