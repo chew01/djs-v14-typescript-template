@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import type { GatewayIntentsString } from 'discord.js';
 
-const GatewayIntents = require('./GatewayIntents.json');
+const GatewayIntents = require('../config/GatewayIntents.json');
 
 export default class Config {
   private static populateConfig() {

@@ -2,7 +2,7 @@ import { Client } from 'discord.js';
 import fs from 'fs';
 import path from 'path';
 import chalk from 'chalk';
-import Config from './config/Config';
+import Config from './Config';
 import type BotEventHandler from './types/BotEventHandler';
 import CommandHandler from './commands/CommandHandler';
 import Logger from './services/Logger';
@@ -51,5 +51,4 @@ export default class ExtendedClient extends Client {
   }
 }
 
-export const bot = new ExtendedClient();
-bot.initialise();
+new ExtendedClient().initialise();

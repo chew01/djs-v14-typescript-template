@@ -3,7 +3,7 @@ import path from 'path';
 import { SlashCommandBuilder } from 'discord.js';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v10';
-import Config from '../config/Config';
+import Config from '../Config';
 import Logger from '../services/Logger';
 import SlashCommand from '../types/SlashCommand';
 

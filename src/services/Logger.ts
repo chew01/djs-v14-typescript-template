@@ -3,7 +3,7 @@ import type { CommandInteraction } from 'discord.js';
 import pino from 'pino';
 
 export default class Logger {
-  private static Pino = pino({}, pino.transport({
+  private static Pino = pino(pino.transport({
     target: 'pino-pretty',
     options: {
       colorize: true,

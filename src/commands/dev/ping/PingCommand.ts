@@ -1,6 +1,5 @@
 import { CommandInteraction, EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import SlashCommand from '../../../types/SlashCommand';
-import { bot } from '../../../ExtendedClient';
 
 class PingCommand extends SlashCommand {
   async execute(interaction: CommandInteraction) {
@@ -11,7 +10,7 @@ class PingCommand extends SlashCommand {
         title: 'Pong!',
         fields: [
           { name: 'API Latency', value: `${deferCheck.createdTimestamp - interaction.createdTimestamp}ms` },
-          { name: 'Websocket Latency', value: `${bot.ws.ping}ms` },
+          { name: 'Websocket Latency', value: `${interaction.client.ws.ping}ms` },
         ],
       });
       return interaction.editReply({ embeds: [CachedPingEmbed] });
@@ -20,7 +19,7 @@ class PingCommand extends SlashCommand {
     const UncachedPingEmbed = new EmbedBuilder({
       title: 'Pong!',
       fields: [
-        { name: 'Websocket Latency', value: `${bot.ws.ping}ms` },
+        { name: 'Websocket Latency', value: `${interaction.client.ws.ping}ms` },
       ],
     });
     return interaction.editReply({ embeds: [UncachedPingEmbed] });
