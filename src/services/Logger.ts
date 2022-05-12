@@ -1,83 +1,44 @@
-import log from 'loglevel';
 import chalk from 'chalk';
 import type { CommandInteraction } from 'discord.js';
-
-type ColorFunction = (msg: string) => string;
-
-const prefixes = new Map<string, string>([
-  ['trace', 'TRACE'],
-  ['debug', 'DEBUG'],
-  ['info', 'INFO'],
-  ['warn', 'WARN'],
-  ['error', 'ERROR'],
-]);
-
-const noColor: (str: string) => string = (msg) => msg;
-const colorFunctions = new Map<string, ColorFunction>([
-  ['debug', chalk.gray],
-  ['info', chalk.cyan],
-  ['warn', chalk.yellow],
-  ['error', chalk.red.bold.italic],
-]);
+import pino from 'pino';
 
 export default class Logger {
-  public static writeLog(level: 'trace' | 'debug' | 'info' | 'warn' | 'error', ...args: string[]) {
-    const prefix = prefixes.get(level);
-    let color = colorFunctions.get(level);
-    if (!color) color = noColor;
-
-    const date = new Date();
-    const statement = [
-      `[${date.toLocaleDateString()} ${date.toLocaleTimeString()}]`,
-      color(prefix || 'DEBUG'),
-      '>',
-      ...args,
-    ];
-
-    switch (level) {
-      case 'trace':
-        log.trace(...statement);
-        break;
-      case 'debug':
-        log.debug(...statement);
-        break;
-      case 'info':
-        log.info(...statement);
-        break;
-      case 'warn':
-        log.warn(...statement);
-        break;
-      case 'error':
-        log.error(...statement);
-        break;
-      default:
-        log.debug(...statement);
-    }
-  }
+  private static Pino = pino({}, pino.transport({
+    target: 'pino-pretty',
+    options: {
+      colorize: true,
+      ignore: 'pid,hostname',
+      translateTime: 'yyyy-mm-dd HH:MM:ss.l',
+    },
+  }));
 
   public static setDevMode() {
-    log.setLevel('info');
-    log.info(chalk.bgGreen.black.italic.bold(' [DEVELOPMENT MODE] set to TRUE, info level logging will be enabled. '));
+    Logger.Pino.level = 'info';
+    Logger.info(chalk.bgGreen.black.italic.bold(' [DEVELOPMENT MODE] set to TRUE, info level logging will be enabled. '));
   }
 
-  public static trace(...args: string[]) {
-    Logger.writeLog('trace', ...args);
+  public static setProdMode() {
+    Logger.Pino.level = 'warn';
   }
 
-  public static debug(...args: string[]) {
-    Logger.writeLog('debug', ...args);
+  public static trace(message: string) {
+    Logger.Pino.trace(message);
   }
 
-  public static info(...args: string[]) {
-    Logger.writeLog('info', ...args);
+  public static debug(message: string) {
+    Logger.Pino.debug(message);
   }
 
-  public static warn(...args: string[]) {
-    Logger.writeLog('warn', ...args);
+  public static info(message: string) {
+    Logger.Pino.info(message);
   }
 
-  public static error(...args: string[]) {
-    Logger.writeLog('error', ...args);
+  public static warn(message: string) {
+    Logger.Pino.warn(message);
+  }
+
+  public static error(message: string) {
+    Logger.Pino.error(message);
   }
 
   public static logCommand(

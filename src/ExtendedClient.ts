@@ -40,6 +40,7 @@ export default class ExtendedClient extends Client {
 
   public async initialise() {
     if (Config.DEVELOPMENT_MODE) Logger.setDevMode();
+    else Logger.setProdMode();
     Logger.info(chalk.yellow('INITIALIZING...'));
     await this.loadEvents();
 
@@ -50,4 +51,5 @@ export default class ExtendedClient extends Client {
   }
 }
 
-new ExtendedClient().initialise();
+export const bot = new ExtendedClient();
+bot.initialise();
