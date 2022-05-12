@@ -1,9 +1,29 @@
-import { CommandInteraction, SlashCommandBuilder } from 'discord.js';
+import { CommandInteraction, EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import SlashCommand from '../../../types/SlashCommand';
+import { bot } from '../../../ExtendedClient';
 
 class PingCommand extends SlashCommand {
-  execute(interaction: CommandInteraction) {
-    return interaction.reply('Ping!');
+  async execute(interaction: CommandInteraction) {
+    if (interaction.inCachedGuild()) {
+      const deferCheck = await interaction.deferReply({ fetchReply: true });
+
+      const CachedPingEmbed = new EmbedBuilder({
+        title: 'Pong!',
+        fields: [
+          { name: 'API Latency', value: `${deferCheck.createdTimestamp - interaction.createdTimestamp}ms` },
+          { name: 'Websocket Latency', value: `${bot.ws.ping}ms` },
+        ],
+      });
+      return interaction.editReply({ embeds: [CachedPingEmbed] });
+    }
+
+    const UncachedPingEmbed = new EmbedBuilder({
+      title: 'Pong!',
+      fields: [
+        { name: 'Websocket Latency', value: `${bot.ws.ping}ms` },
+      ],
+    });
+    return interaction.editReply({ embeds: [UncachedPingEmbed] });
   }
 }
 
