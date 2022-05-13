@@ -1,5 +1,5 @@
 {
-  "name": "djs-v13-typescript-template",
+  "name": "djs-v14-typescript-template",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,15 +11,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/chew01/djs-v13-typescript-template.git"
+    "url": "git+https://github.com/chew01/djs-v14-typescript-template.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/chew01/djs-v13-typescript-template/issues"
+    "url": "https://github.com/chew01/djs-v14-typescript-template/issues"
   },
-  "homepage": "https://github.com/chew01/djs-v13-typescript-template#readme",
+  "homepage": "https://github.com/chew01/djs-v14-typescript-template#readme",
   "dependencies": {
     "@discordjs/rest": "^0.5.0-dev.1651493333-4ba0f56",
     "chalk": "^4.1.2",
