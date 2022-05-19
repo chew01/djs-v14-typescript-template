@@ -1,4 +1,8 @@
-import { CommandInteraction, EmbedBuilder, SlashCommandBuilder } from 'discord.js';
+import {
+  ApplicationCommandOptionData,
+  CommandInteraction,
+  EmbedBuilder,
+} from 'discord.js';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import SlashCommand from '../../../types/SlashCommand';
@@ -7,7 +11,13 @@ import MathUtils from '../../../utils/MathUtils';
 dayjs.extend(duration);
 
 class InfoCommand extends SlashCommand {
-  async execute(interaction: CommandInteraction) {
+  public name: string = 'info';
+
+  public description: string = 'Replies with bot statistics';
+
+  public options: ApplicationCommandOptionData[] = [];
+
+  async run(interaction: CommandInteraction) {
     const usage = process.memoryUsage();
     const totalGuilds = interaction.client.guilds.cache.size.toString();
     const totalChannels = interaction.client.channels.cache.size.toString();
@@ -31,9 +41,5 @@ class InfoCommand extends SlashCommand {
     return interaction.reply({ embeds: [InfoEmbed] });
   }
 }
-
-export const builder = new SlashCommandBuilder()
-  .setName('info')
-  .setDescription('Replies with bot statistics.');
 
 export default new InfoCommand();

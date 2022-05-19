@@ -1,9 +1,15 @@
-import type { CommandInteraction } from 'discord.js';
+import type {
+  ApplicationCommandOptionData,
+  ChatInputApplicationCommandData,
+  CommandInteraction,
+} from 'discord.js';
 
-export default abstract class SlashCommand {
-  abstract execute(interaction: CommandInteraction, ...args: any[]): any;
+export default abstract class SlashCommand implements ChatInputApplicationCommandData {
+  abstract name: string;
 
-  public async run(interaction: CommandInteraction, ...args: any[]) {
-    return this.execute(interaction, args);
-  }
+  abstract description: string;
+
+  abstract options: ApplicationCommandOptionData[];
+
+  abstract run(interaction: CommandInteraction, ...args: any[]): any;
 }

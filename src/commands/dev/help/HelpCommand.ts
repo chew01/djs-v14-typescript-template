@@ -1,31 +1,52 @@
 import {
   ActionRowBuilder,
+  ApplicationCommandOptionData,
   CommandInteraction,
   EmbedBuilder,
   MessageComponentInteraction,
   SelectMenuBuilder,
   SelectMenuInteraction,
-  SlashCommandBuilder,
 } from 'discord.js';
 import SlashCommand from '../../../types/SlashCommand';
 import PingHelpEmbed from './embeds/ping/PingHelpEmbed';
 import InfoHelpEmbed from './embeds/info/InfoHelpEmbed';
 
 const MainEmbed = new EmbedBuilder({
-  author: { name: "Taihou's Helpdesk", iconURL: 'https://i.imgur.com/qYcgbPZ.jpg' },
+  author: {
+    name: "Taihou's Helpdesk",
+    iconURL: 'https://i.imgur.com/qYcgbPZ.jpg',
+  },
   description: "Welcome to Taihou's Helpdesk! Here are the things that you can ask Taihou to do!",
   fields: [
-    { name: '🏓 Ping', value: 'Ping command to test bot responsiveness!' },
-    { name: '📖 Info', value: 'Info command to get bot statistics!' },
+    {
+      name: '🏓 Ping',
+      value: 'Ping command to test bot responsiveness!',
+    },
+    {
+      name: '📖 Info',
+      value: 'Info command to get bot statistics!',
+    },
   ],
 });
 
 const HelpSelector = new SelectMenuBuilder({
   customId: 'help-selector',
   options: [
-    { label: 'Helpdesk', value: 'main', emoji: '❔' },
-    { label: 'Ping command', value: 'ping', emoji: '🏓' },
-    { label: 'Info command', value: 'info', emoji: '📖' },
+    {
+      label: 'Helpdesk',
+      value: 'main',
+      emoji: '❔',
+    },
+    {
+      label: 'Ping command',
+      value: 'ping',
+      emoji: '🏓',
+    },
+    {
+      label: 'Info command',
+      value: 'info',
+      emoji: '📖',
+    },
   ],
   placeholder: 'Choose a category',
 });
@@ -33,7 +54,13 @@ const HelpSelector = new SelectMenuBuilder({
 const HelpActionRow = new ActionRowBuilder<SelectMenuBuilder>({ components: [HelpSelector] });
 
 class HelpCommand extends SlashCommand {
-  public async execute(interaction: CommandInteraction) {
+  public name: string = 'help';
+
+  public description: string = 'Replies with bot info!';
+
+  public options: ApplicationCommandOptionData[] = [];
+
+  public async run(interaction: CommandInteraction) {
     if (interaction.inCachedGuild()) {
       const helpMessage = await interaction.reply(
         { embeds: [MainEmbed], components: [HelpActionRow], fetchReply: true },
@@ -71,7 +98,5 @@ class HelpCommand extends SlashCommand {
     }
   }
 }
-
-export const builder = new SlashCommandBuilder().setName('help').setDescription('Replies with bot info!');
 
 export default new HelpCommand();

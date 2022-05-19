@@ -1,8 +1,18 @@
-import { CommandInteraction, EmbedBuilder, SlashCommandBuilder } from 'discord.js';
+import {
+  ApplicationCommandOptionData,
+  CommandInteraction,
+  EmbedBuilder,
+} from 'discord.js';
 import SlashCommand from '../../../types/SlashCommand';
 
 class PingCommand extends SlashCommand {
-  async execute(interaction: CommandInteraction) {
+  public name: string = 'ping';
+
+  public description: string = 'Replies with Pong!';
+
+  public options: ApplicationCommandOptionData[] = [];
+
+  async run(interaction: CommandInteraction) {
     if (interaction.inCachedGuild()) {
       const deferCheck = await interaction.deferReply({ fetchReply: true });
 
@@ -25,7 +35,5 @@ class PingCommand extends SlashCommand {
     return interaction.editReply({ embeds: [UncachedPingEmbed] });
   }
 }
-
-export const builder = new SlashCommandBuilder().setName('ping').setDescription('Replies with Pong!');
 
 export default new PingCommand();
